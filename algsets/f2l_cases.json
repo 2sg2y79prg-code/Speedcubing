@@ -1,0 +1,449 @@
+{
+ "slug": "f2l",
+ "name": "F2L",
+ "title": "F2L Cases",
+ "groups": [
+  {
+   "name": "Basic inserts",
+   "range": "1-4",
+   "intro": "Every other case ends in one of these. #1/#2: the edge waits on the far side and one trigger joins and inserts. #3/#4: pair already built; move it into place and insert."
+  },
+  {
+   "name": "Corner on top, white facing the side",
+   "range": "5-16",
+   "intro": "Move the edge so a pair can form, join it to the corner, finish with a basic insert. Recognize by edge position and top color."
+  },
+  {
+   "name": "Corner on top, white facing up",
+   "range": "17-24",
+   "intro": "Hardest to pair intuitively. Standard fix: R U2 R' or F' U2 F (#17-20) swings the corner so white faces the side."
+  },
+  {
+   "name": "Corner in the slot, edge on top",
+   "range": "25-30",
+   "intro": "Line the edge up as shown; the first moves lift the corner out already joined; none longer than 8 moves."
+  },
+  {
+   "name": "Edge in the slot, corner on top",
+   "range": "31-36",
+   "intro": "Pull the edge out paired with the corner. #36 is R U R' U' twice, then R U R'."
+  },
+  {
+   "name": "Both pieces in the slot, solved wrong",
+   "range": "37-41",
+   "intro": "Take the pair out as a unit and reinsert. Rare; learn last."
+  }
+ ],
+ "core": [
+  {
+   "id": 1,
+   "group": "Basic inserts",
+   "alg": "R U R'",
+   "setup": "R U' R'",
+   "lookFor": "White right; edge back, green on top",
+   "image": "assets/cases/core_01.png"
+  },
+  {
+   "id": 2,
+   "group": "Basic inserts",
+   "alg": "F' U' F",
+   "setup": "F' U F",
+   "lookFor": "White front; edge left, red on top",
+   "image": "assets/cases/core_02.png"
+  },
+  {
+   "id": 3,
+   "group": "Basic inserts",
+   "alg": "U R U' R'",
+   "setup": "R U R' U'",
+   "lookFor": "White front; edge right, green on top",
+   "image": "assets/cases/core_03.png"
+  },
+  {
+   "id": 4,
+   "group": "Basic inserts",
+   "alg": "U' F' U F",
+   "setup": "F' U' F U",
+   "lookFor": "White right; edge front, red on top",
+   "image": "assets/cases/core_04.png"
+  },
+  {
+   "id": 5,
+   "group": "Corner on top, white facing the side",
+   "alg": "U' R U R' U R U R'",
+   "setup": "R U' R' U' R U' R' U",
+   "lookFor": "White right; edge left, green on top",
+   "image": "assets/cases/core_05.png"
+  },
+  {
+   "id": 6,
+   "group": "Corner on top, white facing the side",
+   "alg": "U F' U' F U' F' U' F",
+   "setup": "F' U F U F' U F U'",
+   "lookFor": "White front; edge back, red on top",
+   "image": "assets/cases/core_06.png"
+  },
+  {
+   "id": 7,
+   "group": "Corner on top, white facing the side",
+   "alg": "U' R U' R' U R U R'",
+   "setup": "R U' R' U' R U R' U",
+   "lookFor": "White right; edge right, green on top",
+   "image": "assets/cases/core_07.png"
+  },
+  {
+   "id": 8,
+   "group": "Corner on top, white facing the side",
+   "alg": "U F' U F U' F' U' F",
+   "setup": "F' U F U F' U' F U'",
+   "lookFor": "White front; edge front, red on top",
+   "image": "assets/cases/core_08.png"
+  },
+  {
+   "id": 9,
+   "group": "Corner on top, white facing the side",
+   "alg": "U' R U2 R' U2 R U' R'",
+   "setup": "R U R' U2 R U2 R' U",
+   "lookFor": "White front; edge left, green on top",
+   "image": "assets/cases/core_09.png"
+  },
+  {
+   "id": 10,
+   "group": "Corner on top, white facing the side",
+   "alg": "U F' U2 F U2 F' U F",
+   "setup": "F' U' F U2 F' U2 F U'",
+   "lookFor": "White right; edge back, red on top",
+   "image": "assets/cases/core_10.png"
+  },
+  {
+   "id": 11,
+   "group": "Corner on top, white facing the side",
+   "alg": "U' R U R' U2 R U' R'",
+   "setup": "R U R' U2 R U' R' U",
+   "lookFor": "White front; edge back, green on top",
+   "image": "assets/cases/core_11.png"
+  },
+  {
+   "id": 12,
+   "group": "Corner on top, white facing the side",
+   "alg": "U' r U' R' U R U r'",
+   "setup": "r U' R' U' R U r' U",
+   "lookFor": "White right; edge left, red on top",
+   "image": "assets/cases/core_12.png"
+  },
+  {
+   "id": 13,
+   "group": "Corner on top, white facing the side",
+   "alg": "U' R U2 R' U F' U' F",
+   "setup": "F' U F U' R U2 R' U",
+   "lookFor": "White front; edge right, red on top",
+   "image": "assets/cases/core_13.png"
+  },
+  {
+   "id": 14,
+   "group": "Corner on top, white facing the side",
+   "alg": "R' U2 R2 U R2 U R",
+   "setup": "R' U' R2 U' R2 U2 R",
+   "lookFor": "White right; edge front, green on top",
+   "image": "assets/cases/core_14.png"
+  },
+  {
+   "id": 15,
+   "group": "Corner on top, white facing the side",
+   "alg": "R U' R' U2 F' U' F",
+   "setup": "F' U F U2 R U R'",
+   "lookFor": "White right; edge right, red on top",
+   "image": "assets/cases/core_15.png"
+  },
+  {
+   "id": 16,
+   "group": "Corner on top, white facing the side",
+   "alg": "F' U F U2 R U R'",
+   "setup": "R U' R' U2 F' U' F",
+   "lookFor": "White front; edge front, green on top",
+   "image": "assets/cases/core_16.png"
+  },
+  {
+   "id": 17,
+   "group": "Corner on top, white facing up",
+   "alg": "R U2 R' U' R U R'",
+   "setup": "R U' R' U R U2 R'",
+   "lookFor": "White up; edge right, green on top",
+   "image": "assets/cases/core_17.png"
+  },
+  {
+   "id": 18,
+   "group": "Corner on top, white facing up",
+   "alg": "F' U2 F U F' U' F",
+   "setup": "F' U F U' F' U2 F",
+   "lookFor": "White up; edge front, red on top",
+   "image": "assets/cases/core_18.png"
+  },
+  {
+   "id": 19,
+   "group": "Corner on top, white facing up",
+   "alg": "U R U2 R' U R U' R'",
+   "setup": "R U R' U' R U2 R' U'",
+   "lookFor": "White up; edge back, green on top",
+   "image": "assets/cases/core_19.png"
+  },
+  {
+   "id": 20,
+   "group": "Corner on top, white facing up",
+   "alg": "U' F' U2 F U' F' U F",
+   "setup": "F' U' F U F' U2 F U",
+   "lookFor": "White up; edge left, red on top",
+   "image": "assets/cases/core_20.png"
+  },
+  {
+   "id": 21,
+   "group": "Corner on top, white facing up",
+   "alg": "U2 R U R' U R U' R'",
+   "setup": "R U R' U' R U' R' U2",
+   "lookFor": "White up; edge left, green on top",
+   "image": "assets/cases/core_21.png"
+  },
+  {
+   "id": 22,
+   "group": "Corner on top, white facing up",
+   "alg": "r U' r' U2 r U r'",
+   "setup": "r U' r' U2 r U r'",
+   "lookFor": "White up; edge back, red on top",
+   "image": "assets/cases/core_22.png"
+  },
+  {
+   "id": 23,
+   "group": "Corner on top, white facing up",
+   "alg": "U2 R2 U2 R' U' R U' R2",
+   "setup": "R2 U R' U R U2 R2 U2",
+   "lookFor": "White up; edge front, green on top",
+   "image": "assets/cases/core_23.png"
+  },
+  {
+   "id": 24,
+   "group": "Corner on top, white facing up",
+   "alg": "F U R U' R' F' R U' R'",
+   "setup": "R U R' F R U R' U' F'",
+   "lookFor": "White up; edge right, red on top",
+   "image": "assets/cases/core_24.png"
+  },
+  {
+   "id": 25,
+   "group": "Corner in the slot, edge on top",
+   "alg": "U R U' R' U' F' U F",
+   "setup": "F' U' F U R U R' U'",
+   "lookFor": "Corner solved in slot; edge front, red on top",
+   "image": "assets/cases/core_25.png"
+  },
+  {
+   "id": 26,
+   "group": "Corner in the slot, edge on top",
+   "alg": "U' F' U F U R U' R'",
+   "setup": "R U R' U' F' U' F U",
+   "lookFor": "Corner solved in slot; edge right, green on top",
+   "image": "assets/cases/core_26.png"
+  },
+  {
+   "id": 27,
+   "group": "Corner in the slot, edge on top",
+   "alg": "F' U F U' F' U F",
+   "setup": "F' U' F U F' U' F",
+   "lookFor": "Corner in slot, white right; edge front, red on top",
+   "image": "assets/cases/core_27.png"
+  },
+  {
+   "id": 28,
+   "group": "Corner in the slot, edge on top",
+   "alg": "R U' R' U R U' R'",
+   "setup": "R U R' U' R U R'",
+   "lookFor": "Corner in slot, white front; edge right, green on top",
+   "image": "assets/cases/core_28.png"
+  },
+  {
+   "id": 29,
+   "group": "Corner in the slot, edge on top",
+   "alg": "R U R' U' R U R'",
+   "setup": "R U' R' U R U' R'",
+   "lookFor": "Corner in slot, white right; edge right, green on top",
+   "image": "assets/cases/core_29.png"
+  },
+  {
+   "id": 30,
+   "group": "Corner in the slot, edge on top",
+   "alg": "F' U' F U F' U' F",
+   "setup": "F' U F U' F' U F",
+   "lookFor": "Corner in slot, white front; edge front, red on top",
+   "image": "assets/cases/core_30.png"
+  },
+  {
+   "id": 31,
+   "group": "Edge in the slot, corner on top",
+   "alg": "U R U R' U2 R U R'",
+   "setup": "R U' R' U2 R U' R' U'",
+   "lookFor": "White right; edge in slot, correct",
+   "image": "assets/cases/core_31.png"
+  },
+  {
+   "id": 32,
+   "group": "Edge in the slot, corner on top",
+   "alg": "U' R U' R' U2 R U' R'",
+   "setup": "R U R' U2 R U R' U",
+   "lookFor": "White front; edge in slot, correct",
+   "image": "assets/cases/core_32.png"
+  },
+  {
+   "id": 33,
+   "group": "Edge in the slot, corner on top",
+   "alg": "U2 F' U F U R U R'",
+   "setup": "R U' R' U' F' U' F U2",
+   "lookFor": "White right; edge in slot, flipped",
+   "image": "assets/cases/core_33.png"
+  },
+  {
+   "id": 34,
+   "group": "Edge in the slot, corner on top",
+   "alg": "U2 R U' R' U' F' U' F",
+   "setup": "F' U F U R U R' U2",
+   "lookFor": "White front; edge in slot, flipped",
+   "image": "assets/cases/core_34.png"
+  },
+  {
+   "id": 35,
+   "group": "Edge in the slot, corner on top",
+   "alg": "U' R' F R F' R U' R'",
+   "setup": "R U R' F R' F' R U",
+   "lookFor": "White up; edge in slot, flipped",
+   "image": "assets/cases/core_35.png"
+  },
+  {
+   "id": 36,
+   "group": "Edge in the slot, corner on top",
+   "alg": "R U R' U' R U R' U' R U R'",
+   "setup": "R U' R' U R U' R' U R U' R'",
+   "lookFor": "White up; edge in slot, correct",
+   "image": "assets/cases/core_36.png"
+  },
+  {
+   "id": 37,
+   "group": "Both pieces in the slot, solved wrong",
+   "alg": "R2 U2 F R2 F' U2 R' U R'",
+   "setup": "R U' R U2 F R2 F' U2 R2",
+   "lookFor": "Corner solved in slot; edge in slot, flipped",
+   "image": "assets/cases/core_37.png"
+  },
+  {
+   "id": 38,
+   "group": "Both pieces in the slot, solved wrong",
+   "alg": "R U' R' U' R U R' U2 R U' R'",
+   "setup": "R U R' U2 R U' R' U R U R'",
+   "lookFor": "Corner in slot, white front; edge in slot, correct",
+   "image": "assets/cases/core_38.png"
+  },
+  {
+   "id": 39,
+   "group": "Both pieces in the slot, solved wrong",
+   "alg": "R U' R' U R U2 R' U R U' R'",
+   "setup": "R U R' U' R U2 R' U' R U R'",
+   "lookFor": "Corner in slot, white right; edge in slot, correct",
+   "image": "assets/cases/core_39.png"
+  },
+  {
+   "id": 40,
+   "group": "Both pieces in the slot, solved wrong",
+   "alg": "R F U R U' R' F' U' R'",
+   "setup": "R U F R U R' U' F' R'",
+   "lookFor": "Corner in slot, white front; edge in slot, flipped",
+   "image": "assets/cases/core_40.png"
+  },
+  {
+   "id": 41,
+   "group": "Both pieces in the slot, solved wrong",
+   "alg": "R U' R' r U' r' U2 r U r'",
+   "setup": "r U' r' U2 r U r' R U R'",
+   "lookFor": "Corner in slot, white right; edge in slot, flipped",
+   "image": "assets/cases/core_41.png"
+  }
+ ],
+ "original": [
+  {
+   "id": "S1",
+   "alg": "r U' R' U R U r'",
+   "setup": "r U' R' U' R U r'",
+   "note": "Same case as #12, one U' later.",
+   "image": "assets/cases/src_01.png",
+   "coreMatch": 12
+  },
+  {
+   "id": "S2",
+   "alg": "L F' L' F R U R'",
+   "setup": "R U' R' F' L F L'",
+   "note": "Two slots at once: with front-left open, L F' L' F solves front-left and sets up front-right, then R U R' inserts. Front-right pieces alone are #23.",
+   "image": "assets/cases/src_02.png",
+   "coreMatch": null
+  },
+  {
+   "id": "S3",
+   "alg": "r U' r' U2 r U r'",
+   "setup": "r U' r' U2 r U r'",
+   "note": "Identical to #22.",
+   "image": "assets/cases/src_03.png",
+   "coreMatch": 22
+  },
+  {
+   "id": "S4",
+   "alg": "R2 U2 R' U' R U' R2",
+   "setup": "R2 U R' U R U2 R2",
+   "note": "Same case as #23 with the corner at back-left, so no opening U2.",
+   "image": "assets/cases/src_04.png",
+   "coreMatch": 23
+  },
+  {
+   "id": "S5",
+   "alg": "R2 u R2 u' R2",
+   "setup": "R2 u R2 u' R2",
+   "note": "Edge swap: white-up corner above the slot, its edge stuck in back-left, back-left edge in front-right. Fixes both.",
+   "image": "assets/cases/src_05.png",
+   "coreMatch": null
+  },
+  {
+   "id": "S6",
+   "alg": "R2 u' R2 u R2",
+   "setup": "R2 u' R2 u R2",
+   "note": "Edge swap on other slots: back-right corner on top white up, back-right edge in front-left, front-left edge in back-right. Fixes both.",
+   "image": "assets/cases/src_06.png",
+   "coreMatch": null
+  },
+  {
+   "id": "S7",
+   "alg": "L2 u L2 u' L2",
+   "setup": "L2 u L2 u' L2",
+   "note": "Front-right corner solved; its edge is in back-left and the back-left edge is in front-right. Back-left corner on top, white up. Fixes both.",
+   "image": "assets/cases/src_07.png",
+   "coreMatch": null
+  },
+  {
+   "id": "S8",
+   "alg": "r' U2 R2 U R2 U r",
+   "setup": "r' U' R2 U' R2 U2 r",
+   "note": "Same case as #10, one move shorter, no F turns.",
+   "image": "assets/cases/src_08.png",
+   "coreMatch": 10
+  },
+  {
+   "id": "S9",
+   "alg": "r' D' r U' r' D r",
+   "setup": "r' D' r U r' D r",
+   "note": "Same case as #4; U2 F' U F is 4 moves, so skip this one.",
+   "image": "assets/cases/src_09.png",
+   "coreMatch": 4
+  },
+  {
+   "id": "S10",
+   "alg": "R u R' U R u' R'",
+   "setup": "R u R' U' R u' R'",
+   "note": "Front-right corner on top at back-left, white up; its edge stuck in back-left; back-left edge on top at left. Fixes both.",
+   "image": "assets/cases/src_10.png",
+   "coreMatch": null
+  }
+ ]
+}
