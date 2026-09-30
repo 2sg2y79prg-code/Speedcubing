@@ -56,41 +56,67 @@ function initialData(): Data {
 
 const byTime = (a: Solve, b: Solve) => a.timestamp - b.timestamp;
 
-/** IndexedDB storage (structured clone, no JSON round-trip), with a localStorage fallback. */
+type Stored = { state: Data; version?: number };
+interface Wrapped {
+  savedAt: number;
+  value: Stored;
+}
+const unwrap = (v: unknown): Wrapped | null => {
+  if (!v || typeof v !== 'object') return null;
+  const o = v as Partial<Wrapped> & Partial<Stored>;
+  if (o.value && typeof o.savedAt === 'number') return o as Wrapped;
+  if (o.state) return { savedAt: 0, value: o as Stored }; // pre-mirror format
+  return null;
+};
+const mirrorKey = (name: string) => `${name}:mirror`;
+
+/**
+ * Saves to IndexedDB (roomy) and mirrors to localStorage (synchronous, survives a reload
+ * that interrupts an IndexedDB write). On load, whichever copy is newer wins.
+ */
 const storage: PersistStorage<Data> = {
   getItem: async (name) => {
+    let idb: Wrapped | null = null;
+    let ls: Wrapped | null = null;
     try {
-      const v = await idbGet(name);
-      if (v) return v;
+      idb = unwrap(await idbGet(name));
     } catch {
-      /* fall through */
+      /* IndexedDB unavailable */
     }
     try {
-      const raw = localStorage.getItem(name);
-      return raw ? JSON.parse(raw) : null;
+      const raw = localStorage.getItem(mirrorKey(name)) ?? localStorage.getItem(name);
+      ls = raw ? unwrap(JSON.parse(raw)) : null;
     } catch {
-      return null;
+      /* localStorage unavailable or corrupt */
     }
+    const best = !idb ? ls : !ls ? idb : ls.savedAt > idb.savedAt ? ls : idb;
+    return (best?.value as never) ?? null;
   },
   setItem: async (name, value) => {
+    const wrapped: Wrapped = { savedAt: Date.now(), value: value as Stored };
     try {
-      await idbSet(name, value);
+      localStorage.setItem(mirrorKey(name), JSON.stringify(wrapped));
     } catch {
-      try {
-        localStorage.setItem(name, JSON.stringify(value));
-      } catch (e) {
-        console.error('Could not save data', e);
-      }
+      /* quota exceeded for very large histories; IndexedDB still has it */
+    }
+    try {
+      await idbSet(name, wrapped);
+    } catch (e) {
+      console.error('Could not save to IndexedDB', e);
     }
   },
   removeItem: async (name) => {
     try {
+      localStorage.removeItem(mirrorKey(name));
       await idbDel(name);
     } catch {
-      localStorage.removeItem(name);
+      /* ignore */
     }
   },
 };
+
+// Ask the browser not to evict our data under storage pressure.
+if (typeof navigator !== 'undefined') navigator.storage?.persist?.().catch(() => {});
 
 export const useStore = create<AppState>()(
   persist(

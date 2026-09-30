@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import type { Route } from '../../lib/router';
-import { ALG_SETS, F2L } from '../../lib/algsets';
+import { ALG_SETS } from '../../lib/algsets';
+import { LEARN_TABS } from '../../lib/learnTabs';
 import { NotationPage } from './NotationPage';
 import { CasesPage } from './CasesPage';
 import { OriginalSheetPage } from './OriginalSheetPage';
@@ -8,13 +10,12 @@ import { CaseDrillPage } from './CaseDrillPage';
 
 export function LearnPage({ route }: { route: Route }) {
   const sub = route.parts[1] ?? 'notation';
-  const tabs = [
-    { id: 'notation', label: 'Notation' },
-    ...ALG_SETS.map((s) => ({ id: s.slug, label: s.title })),
-    ...(F2L?.original.length ? [{ id: 'original', label: 'Original Sheet' }] : []),
-    { id: 'plan', label: 'Practice Plan' },
-    { id: 'drill', label: 'Case Drill' },
-  ];
+  const tabs = LEARN_TABS;
+  const focusing = route.query.has('case');
+  // Jumping to another Learn section (e.g. from the header menu) starts at the top.
+  useEffect(() => {
+    if (!focusing) window.scrollTo(0, 0);
+  }, [sub, focusing]);
   const set = ALG_SETS.find((s) => s.slug === sub);
 
   return (
