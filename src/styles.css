@@ -318,7 +318,9 @@ body.running .sidebar, body.running .scramble-bar, body.running .timer-avgs, bod
 .drill-img { width: min(280px, 70vw); aspect-ratio: 1; object-fit: contain; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; }
 .drill-img.wide { width: min(460px, 80vw); aspect-ratio: 16 / 9; }
 .drill-timer { font-family: var(--mono); font-size: 56px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em; }
-.drill-timer.running { color: var(--good); }
+.drill-timer { transition: color 120ms ease; }
+.drill-timer.holding { color: var(--bad); }
+.drill-timer.ready { color: var(--good); }
 .mini-list { display: flex; flex-direction: column; font-size: 13px; }
 .mini-list > div { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
 .mini-list > div:last-child { border-bottom: 0; }

@@ -40,7 +40,8 @@ interface Current {
   auf: string;
 }
 
-type TPhase = 'idle' | 'running' | 'done';
+type TPhase = 'idle' | 'holding' | 'ready' | 'running' | 'done';
+const HOLD_MS = 300;
 
 function readTimedPref(): boolean {
   try {
@@ -82,7 +83,13 @@ export function CaseDrillPage({ pool: poolParam }: { pool: string | null }) {
   const [cur, setCur] = useState<Current | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [timed, setTimedState] = useState(readTimedPref);
-  const [tPhase, setTPhase] = useState<TPhase>('idle');
+  const [tPhase, setTPhaseState] = useState<TPhase>('idle');
+  const tPhaseRef = useRef<TPhase>('idle');
+  const holdTimer = useRef(0);
+  const setTPhase = useCallback((p: TPhase) => {
+    tPhaseRef.current = p;
+    setTPhaseState(p);
+  }, []);
   const [start, setStart] = useState(0);
   const [lastMs, setLastMs] = useState<number | null>(null);
   const [log, setLog] = useState<{ key: string; ms: number | null; id: number }[]>([]);
@@ -104,9 +111,10 @@ export function CaseDrillPage({ pool: poolParam }: { pool: string | null }) {
       return { key: choices[Math.floor(Math.random() * choices.length)], auf: randomAuf() };
     });
     setRevealed(false);
+    window.clearTimeout(holdTimer.current);
     setTPhase('idle');
     setLastMs(null);
-  }, []);
+  }, [setTPhase]);
 
   // New pool → new case.
   useEffect(() => {
@@ -115,10 +123,25 @@ export function CaseDrillPage({ pool: poolParam }: { pool: string | null }) {
 
   const ref = cur ? CASE_BY_KEY.get(cur.key) : undefined;
 
-  const startTimer = useCallback(() => {
-    setStart(performance.now());
-    setTPhase('running');
-  }, []);
+  // Same as the main timer: hold ~0.3s until green, release to start.
+  const beginHold = useCallback(() => {
+    if (tPhaseRef.current !== 'idle') return;
+    setTPhase('holding');
+    window.clearTimeout(holdTimer.current);
+    holdTimer.current = window.setTimeout(() => {
+      if (tPhaseRef.current === 'holding') setTPhase('ready');
+    }, HOLD_MS);
+  }, [setTPhase]);
+  const endHold = useCallback(() => {
+    window.clearTimeout(holdTimer.current);
+    if (tPhaseRef.current === 'ready') {
+      setStart(performance.now());
+      setTPhase('running');
+    } else if (tPhaseRef.current === 'holding') {
+      setTPhase('idle');
+    }
+  }, [setTPhase]);
+  useEffect(() => () => window.clearTimeout(holdTimer.current), []);
   const stopTimer = useCallback(() => {
     if (!cur) return;
     const ms = Math.round(performance.now() - start);
@@ -127,7 +150,7 @@ export function CaseDrillPage({ pool: poolParam }: { pool: string | null }) {
     setRevealed(true);
     addDrillTime(cur.key, ms);
     setLog((l) => [{ key: cur.key, ms, id: Date.now() }, ...l].slice(0, 50));
-  }, [cur, start, addDrillTime]);
+  }, [cur, start, addDrillTime, setTPhase]);
   const reveal = useCallback(() => {
     if (revealed || !cur) return;
     setRevealed(true);
@@ -144,19 +167,32 @@ export function CaseDrillPage({ pool: poolParam }: { pool: string | null }) {
       if (keyboardBusy() || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.code === 'Space') {
         e.preventDefault();
-        if (timed && tPhase === 'idle' && !revealed) startTimer();
+        if (timed && !revealed) beginHold();
         else if (!revealed) reveal();
         else next();
       } else if (e.key === 'Enter' || e.key === 'ArrowRight' || e.key.toLowerCase() === 'n') {
         e.preventDefault();
         next();
+      } else if (e.key === 'Escape') {
+        window.clearTimeout(holdTimer.current);
+        if (tPhaseRef.current === 'holding' || tPhaseRef.current === 'ready') setTPhase('idle');
       } else if (e.key.toLowerCase() === 'r') {
         reveal();
       }
     };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        endHold();
+      }
+    };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [tPhase, timed, revealed, startTimer, stopTimer, reveal, next]);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('keyup', onKeyUp);
+    };
+  }, [tPhase, timed, revealed, beginHold, endHold, stopTimer, reveal, next, setTPhase]);
 
   const stats = (k: string) => {
     const t = drillTimes[k];
@@ -217,8 +253,17 @@ export function CaseDrillPage({ pool: poolParam }: { pool: string | null }) {
               </div>
 
               {timed && (
-                <div className={'drill-timer' + (tPhase === 'running' ? ' running' : '')}>
-                  {tPhase === 'running' ? <Running start={start} /> : fmt(lastMs ?? 0)}
+                <div
+                  className={'drill-timer ' + tPhase}
+                  style={{ touchAction: 'none', userSelect: 'none', cursor: 'default' }}
+                  onPointerDown={(e) => {
+                    if (tPhaseRef.current === 'running') return stopTimer();
+                    if (!revealed && (e.pointerType !== 'mouse' || e.button === 0)) beginHold();
+                  }}
+                  onPointerUp={endHold}
+                  onPointerLeave={endHold}
+                >
+                  {tPhase === 'running' ? <Running start={start} /> : tPhase === 'holding' || tPhase === 'ready' ? '0.00' : fmt(lastMs ?? 0)}
                 </div>
               )}
 
@@ -248,12 +293,12 @@ export function CaseDrillPage({ pool: poolParam }: { pool: string | null }) {
                 </div>
               )}
 
+              {timed && !revealed && tPhase !== 'running' && (
+                <div className="small muted">
+                  Hold <span className="kbd">space</span> (or press and hold the timer) until it turns green, release to start, any key stops.
+                </div>
+              )}
               <div className="row wrap" style={{ justifyContent: 'center', marginTop: 'auto' }}>
-                {timed && tPhase === 'idle' && !revealed && (
-                  <button className="btn primary" onClick={startTimer}>
-                    Start timer <span className="kbd" style={{ background: 'transparent', color: 'inherit', borderColor: 'rgba(255,255,255,.5)' }}>space</span>
-                  </button>
-                )}
                 {tPhase === 'running' && (
                   <button className="btn primary" onClick={stopTimer}>
                     Stop
@@ -323,7 +368,7 @@ export function CaseDrillPage({ pool: poolParam }: { pool: string | null }) {
             )}
           </div>
           <p className="tiny faint">
-            Keys: <span className="kbd">space</span> start/stop timer or reveal/next · <span className="kbd">R</span> reveal ·{' '}
+            Keys: <span className="kbd">space</span> hold + release to start, any key stops (or reveal/next) · <span className="kbd">R</span> reveal ·{' '}
             <span className="kbd">enter</span> next
           </p>
         </aside>
